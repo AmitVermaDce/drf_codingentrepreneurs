@@ -1,10 +1,11 @@
 import requests
 import pprint
 
-endpoint = "http://127.0.0.1:8000/api/products/"
+endpoint = "http://127.0.0.1:8000/api/products/create/"
 
 data = {
-    "title": "This field is required."
+    "title": "This field is newly added",
+    "content": "Text added for content enriching..."
 }
 
 response = requests.post(endpoint, json=data)
