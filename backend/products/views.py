@@ -3,12 +3,13 @@ from .serializers import ProductsSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import authentication, generics, mixins, permissions
+from .permissions import IsStaffEditorPermission
 
 class ProductCreateAPIView(generics.ListCreateAPIView):
     queryset = Products.objects.all()
     serializer_class = ProductsSerializer
-    authentication_classes = [authentication.SessionAuthentication]
-    permission_classes = [permissions.DjangoModelPermissions]
+    authentication_classes = [authentication.SessionAuthentication, authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAdminUser, IsStaffEditorPermission]
 
     def perform_create(self, serializer):
         title = serializer.validated_data.get("title")
