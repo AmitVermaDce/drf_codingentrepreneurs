@@ -2,11 +2,13 @@ from .models import Products
 from .serializers import ProductsSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from rest_framework import generics, mixins
+from rest_framework import authentication, generics, mixins, permissions
 
-class ProductCreateAPIView(generics.CreateAPIView):
+class ProductCreateAPIView(generics.ListCreateAPIView):
     queryset = Products.objects.all()
     serializer_class = ProductsSerializer
+    authentication_classes = [authentication.SessionAuthentication]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def perform_create(self, serializer):
         title = serializer.validated_data.get("title")
