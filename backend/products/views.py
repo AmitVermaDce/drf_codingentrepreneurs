@@ -2,14 +2,12 @@ from .models import Products
 from .serializers import ProductsSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from rest_framework import authentication, generics, mixins, permissions
-from .permissions import IsStaffEditorPermission
-from .authentication import TokenAuthentication
+from rest_framework import generics, mixins 
+from components.mixins import StaffEditorPermissionMixin
 
-class ProductCreateAPIView(generics.ListCreateAPIView):
+class ProductCreateAPIView(StaffEditorPermissionMixin, generics.ListCreateAPIView):
     queryset = Products.objects.all()
     serializer_class = ProductsSerializer
-    permission_classes = [permissions.IsAdminUser, IsStaffEditorPermission]
 
     def perform_create(self, serializer):
         title = serializer.validated_data.get("title")
@@ -21,21 +19,21 @@ class ProductCreateAPIView(generics.ListCreateAPIView):
 product_list_create_view = ProductCreateAPIView.as_view()
 
 
-class ProductListAPIView(generics.ListAPIView):
+class ProductListAPIView(StaffEditorPermissionMixin, generics.ListAPIView):
     queryset = Products.objects.all()
     serializer_class = ProductsSerializer
 
 product_list_view = ProductListAPIView.as_view()
 
 
-class ProductDetailAPIView(generics.RetrieveAPIView):
+class ProductDetailAPIView(StaffEditorPermissionMixin, generics.RetrieveAPIView):
     queryset = Products.objects.all()
     serializer_class = ProductsSerializer
 
 product_detail_view = ProductDetailAPIView.as_view()
 
 
-class ProductUpdateAPIView(generics.UpdateAPIView):
+class ProductUpdateAPIView(StaffEditorPermissionMixin, generics.UpdateAPIView):
     queryset = Products.objects.all()
     serializer_class = ProductsSerializer
     lookup_field = 'pk'
@@ -48,7 +46,7 @@ class ProductUpdateAPIView(generics.UpdateAPIView):
 product_update_view = ProductUpdateAPIView.as_view()
 
 
-class ProductDeleteAPIView(generics.DestroyAPIView):
+class ProductDeleteAPIView(StaffEditorPermissionMixin, generics.DestroyAPIView):
     queryset = Products.objects.all()
     serializer_class = ProductsSerializer
     lookup_field = 'pk'
