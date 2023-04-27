@@ -20,4 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/", include("components.urls")),
     path("api/products/", include("products.urls")),
+    path("api/v2/", include("config.routers")),
 ]
