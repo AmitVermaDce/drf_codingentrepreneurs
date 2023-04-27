@@ -10,18 +10,30 @@ class ProductsSerializer(serializers.ModelSerializer):
         view_name="detail_view",
         lookup_field = "pk",
     )
+    email = serializers.EmailField(write_only = True)
     class Meta:
         model = Products
         fields = [
             "pk",
             "url",
             "edit_url",
+            "email",
             "title",
             "content",
             "price",
             "sale_price",
             "my_discount",
         ]
+
+    def create(self, validated_data):
+        # return Products.objects.create(**validated_data) both are same
+        # email = validated_data.pop("email")
+        obj = super().create(validated_data=validated_data)
+        return obj
+    
+    def update(self, instance, validated_data):
+        instance.title = validated_data.get("title")
+        return super().update(instance, validated_data)
 
     def get_edit_url(self, obj):
         request = self.context.get('request')
