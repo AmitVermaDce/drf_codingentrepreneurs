@@ -7,8 +7,8 @@ from .validators import *
 
 class ProductsSerializer(serializers.ModelSerializer):
     owner = UserPublicSerializers(source='user', read_only=True)
-    related_products = UserProductInlineSerializer(source="user.products_set.all", read_only=True, many=True)
-    my_discount = serializers.SerializerMethodField(read_only=True)
+    # related_products = UserProductInlineSerializer(source="user.products_set.all", read_only=True, many=True)
+    # my_discount = serializers.SerializerMethodField(read_only=True)
     edit_url = serializers.SerializerMethodField(read_only = True)
     
     title = serializers.CharField(validators=[validate_title_no_hello, unique_product_title])
@@ -23,8 +23,7 @@ class ProductsSerializer(serializers.ModelSerializer):
             "content",
             "price",
             "sale_price",
-            "my_discount",
-            "related_products",
+            # "my_discount",
         ]
 
     
@@ -51,11 +50,11 @@ class ProductsSerializer(serializers.ModelSerializer):
         return reverse("update_view", kwargs={"pk": obj.pk}, request=request)
         
     
-    def get_my_discount(self, obj):
-        if not hasattr(obj, "id"):
-            return None
-        if not isinstance(obj, Products):
-            return None
-        return obj.get_discount()
+    # def get_my_discount(self, obj):
+    #     if not hasattr(obj, "id"):
+    #         return None
+    #     if not isinstance(obj, Products):
+    #         return None
+    #     return obj.get_discount()
 
     
